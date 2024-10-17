@@ -49,7 +49,7 @@ public class PlaySong extends AppCompatActivity {
         next = findViewById(R.id.next);
         seekBar = findViewById(R.id.seekBar);
 
-       // File[] ext = ContextCompat.getExternalFilesDirs(PlaySong.this, )
+        // File[] ext = ContextCompat.getExternalFilesDirs(PlaySong.this, )
         //Added for Marquee
         textView.setSelected(true);
         textView.setText(song_name);
@@ -183,27 +183,27 @@ public class PlaySong extends AppCompatActivity {
             public void run() {
                 int CurrentPosition = 0;
                 try{
-                while (mediaPlayer!=null && CurrentPosition < mediaPlayer.getDuration()) {
-                    try {
-                        if (mediaPlayer != null & mediaPlayer.isPlaying())
-                            CurrentPosition = mediaPlayer.getCurrentPosition();
-                        if (seekBar != null)
-                            seekBar.setProgress(CurrentPosition);
-                        Thread.sleep(1000);
+                    while (mediaPlayer!=null && CurrentPosition < mediaPlayer.getDuration()) {
+                        try {
+                            if (mediaPlayer != null & mediaPlayer.isPlaying())
+                                CurrentPosition = mediaPlayer.getCurrentPosition();
+                            if (seekBar != null)
+                                seekBar.setProgress(CurrentPosition);
+                            Thread.sleep(1000);
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        catch (IllegalStateException e) {
+                            e.printStackTrace();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
-                    catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    catch (IllegalStateException e) {
-                        e.printStackTrace();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
 
 //                    try {
 //                        synchronized (this) {
@@ -231,17 +231,13 @@ public class PlaySong extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        Intent backToMain = new Intent(PlaySong.this, MainActivity.class);
-//        backToMain.putExtra("com.example.musicplayer.PlaySong.SongPosition", song_position[0]);
-//        startActivity(backToMain);
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        Intent backToMain = getIntent();
-//        int song_position = backToMain.getIntExtra("com.example.musicplayer.PlaySong.SongPosition", 0);
     }
 
     @Override
