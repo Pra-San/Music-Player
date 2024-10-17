@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MusicPlayer</string>
+    <string name="song_name">Song Name</string>
+    <string name="ImageButton">ImageButton</string>
+    <string name="name_of_the_song">Name of the Song</string>
+</resources>
