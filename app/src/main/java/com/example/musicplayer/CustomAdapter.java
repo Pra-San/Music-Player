@@ -31,7 +31,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             super(view);
             view.setOnClickListener(this);
             textView = (TextView) view.findViewById(R.id.textView);
-            // Define click listener for the ViewHolder's View
+
 
         }
 
@@ -75,12 +75,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
+
         viewHolder.getTextView().setText(localdataset.get(position).getName());
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+
     @Override
     public int getItemCount() {
         return localdataset.size();

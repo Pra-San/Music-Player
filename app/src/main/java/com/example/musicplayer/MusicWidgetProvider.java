@@ -39,12 +39,12 @@ public class MusicWidgetProvider extends AppWidgetProvider {
     }
 
     private static String getCurrentTrackTitle() {
-        // Implement logic to get current track title
+
         return "Current Track Title";
     }
 
     private static String getCurrentArtist() {
-        // Implement logic to get current artist
+
         return "Current Artist";
     }
 }

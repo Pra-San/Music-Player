@@ -49,7 +49,7 @@ public class PlaySong extends AppCompatActivity {
         next = findViewById(R.id.next);
         seekBar = findViewById(R.id.seekBar);
 
-        // File[] ext = ContextCompat.getExternalFilesDirs(PlaySong.this, )
+
         //Added for Marquee
         textView.setSelected(true);
         textView.setText(song_name);
@@ -120,9 +120,7 @@ public class PlaySong extends AppCompatActivity {
                 isPlaying = true;
                 seekBar.setProgress(0);
                 play_pause.setImageResource(R.drawable.ic_baseline_pause_24);
-//                synchronized (UpdateSeek){
-//                    UpdateSeek.notify();
-//                }
+
             }
         });
 
@@ -133,11 +131,11 @@ public class PlaySong extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if(b && isPlaying){
                     mediaPlayer.seekTo(i);
-                    //seekBar.setProgress(i);
+
                 }
                 else if(b && !mediaPlayer.isPlaying()) {
                     mediaPlayer.seekTo(i);
-                    //seekBar.setProgress(i);
+
                     mediaPlayer.pause();
                     isPlaying = false;
                 }
