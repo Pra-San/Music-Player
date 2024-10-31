@@ -46,13 +46,22 @@ public class PlaySong extends AppCompatActivity {
     private final BroadcastReceiver songChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String songName = intent.getStringExtra(MusicService.EXTRA_SONG_NAME);
-            if (songName != null) {
-                textView.setText(songName);
-                seekBar.setMax(musicService.getDuration());
-                updateSeekBar();
-                // Update play_pause button icon to "pause" since a new song is playing
-                play_pause.setImageResource(R.drawable.ic_baseline_pause_24);
+            if (MusicService.ACTION_SONG_CHANGED.equals(intent.getAction())) {
+                String songName = intent.getStringExtra(MusicService.EXTRA_SONG_NAME);
+                if (songName != null) {
+                    textView.setText(songName);
+                    seekBar.setMax(musicService.getDuration());
+                    updateSeekBar();
+                    play_pause.setImageResource(R.drawable.ic_baseline_pause_24);
+                }
+            } else if (MusicService.ACTION_STATUS_CHANGED.equals(intent.getAction())) {
+                boolean isPlaying = intent.getBooleanExtra(MusicService.EXTRA_IS_PLAYING, false);
+                play_pause.setImageResource(isPlaying ? R.drawable.ic_baseline_pause_24 : R.drawable.ic_baseline_play_arrow_24);
+                if (isPlaying) {
+                    updateSeekBar();
+                } else {
+                    seekBarHandler.removeCallbacksAndMessages(null);  // Stop updates when paused
+                }
             }
         }
     };
@@ -106,6 +115,9 @@ public class PlaySong extends AppCompatActivity {
             if (isBound) {
                 musicService.pauseOrResume();
                 play_pause.setImageResource(musicService.isPlaying() ? R.drawable.ic_baseline_pause_24 : R.drawable.ic_baseline_play_arrow_24);
+                if (musicService.isPlaying()) {
+                    updateSeekBar();  // Resume updating seek bar when playback resumes
+                }
             }
         });
 
@@ -135,14 +147,18 @@ public class PlaySong extends AppCompatActivity {
             }
         });
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(songChangedReceiver,
-                new IntentFilter(MusicService.ACTION_SONG_CHANGED));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicService.ACTION_SONG_CHANGED);
+        filter.addAction(MusicService.ACTION_STATUS_CHANGED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(songChangedReceiver, filter);
     }
 
     private void updateSeekBar() {
         if (isBound && musicService.isPlaying()) {
             seekBar.setProgress(musicService.getCurrentPosition());
-            seekBarHandler.postDelayed(this::updateSeekBar, 1000);
+            seekBarHandler.postDelayed(this::updateSeekBar, 1000);  // Schedule next update only if playing
+        } else {
+            seekBarHandler.removeCallbacksAndMessages(null);  // Clear updates when stopped or paused
         }
     }
 
