@@ -24,14 +24,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView textView;
 
         public ViewHolder(View view) {
             super(view);
-            view.setOnClickListener(this);
             textView = (TextView) view.findViewById(R.id.textView);
             // Define click listener for the ViewHolder's View
+            view.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                Intent intent = new Intent(view.getContext(), PlaySong.class);
+                intent.putExtra("songList", localdataset);
+                intent.putExtra("songPosition", position);
+                view.getContext().startActivity(intent);
+            });
 
         }
 
@@ -39,17 +45,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             return textView;
         }
 
-        @Override
-        public void onClick(View view) {
-            int position = this.getAdapterPosition();
-            String name = localdataset.get(position).getName().replace(".mp3", "");
-            Intent intent = new Intent(view.getContext(), PlaySong.class);
-            intent.putExtra("com.example.musicplayer.CustomAdapter.SongName",name);
-            intent.putExtra("com.example.musicplayer.CustomAdapter.SongList", localdataset);
-            intent.putExtra("com.example.musicplayer.CustomAdapter.SongPosition", position);
-            view.getContext().startActivity(intent);
-            //Toast.makeText(view.getContext(), "Position is " + Integer.toString(position), Toast.LENGTH_SHORT).show();
-        }
     }
 
     /**
@@ -73,11 +68,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(localdataset.get(position).getName());
+        holder.getTextView().setText(localdataset.get(position).getName().replace(".mp3", ""));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
